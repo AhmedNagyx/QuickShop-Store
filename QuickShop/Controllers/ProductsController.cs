@@ -124,7 +124,7 @@ namespace QuickShop.Controllers
             product.Category = productDto.Category;
             product.ImageFileName = newFileName;
             context.SaveChanges();
-
+             
             return RedirectToAction("Index", "Products");
         }
     }
