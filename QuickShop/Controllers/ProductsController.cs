@@ -16,7 +16,7 @@ namespace QuickShop.Controllers
         }
         public IActionResult Index()
         {
-            var products = context.Products.OrderByDescending(x=> x.Id).ToList();
+            var products = context.Products.OrderByDescending(x => x.Id).ToList();
             return View(products);
         }
         public IActionResult Create()
@@ -27,11 +27,11 @@ namespace QuickShop.Controllers
         [HttpPost]
         public IActionResult Create(ProductDto productDto)
         {
-            if(productDto.ImageFile==null)
+            if (productDto.ImageFile == null)
             {
                 ModelState.AddModelError("ImageFile", "Product image is required.");
             }
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(productDto);
             }
@@ -40,8 +40,8 @@ namespace QuickShop.Controllers
             string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff");
             newFileName += Path.GetExtension(productDto.ImageFile!.FileName);
 
-            string imagePath= environment.WebRootPath + "/Images/" + newFileName;
-            using (var stream= System.IO.File.Create(imagePath))
+            string imagePath = environment.WebRootPath + "/Images/" + newFileName;
+            using (var stream = System.IO.File.Create(imagePath))
             {
                 productDto.ImageFile!.CopyTo(stream);
             }
@@ -60,7 +60,7 @@ namespace QuickShop.Controllers
             context.Products.Add(product);
             context.SaveChanges();
 
-            return RedirectToAction("Index","Products");
+            return RedirectToAction("Index", "Products");
         }
 
         public IActionResult Edit(int id)
@@ -68,7 +68,7 @@ namespace QuickShop.Controllers
             var product = context.Products.Find(id);
             if (product == null)
             {
-                return RedirectToAction("Index","Products");
+                return RedirectToAction("Index", "Products");
             }
 
             // create ProductDto from Product
@@ -87,7 +87,7 @@ namespace QuickShop.Controllers
             return View(productDto);
         }
         [HttpPost]
-        public IActionResult Edit(int id,ProductDto productDto)
+        public IActionResult Edit(int id, ProductDto productDto)
         {
             var product = context.Products.Find(id);
             if (product == null)
@@ -124,7 +124,24 @@ namespace QuickShop.Controllers
             product.Category = productDto.Category;
             product.ImageFileName = newFileName;
             context.SaveChanges();
-             
+
+            return RedirectToAction("Index", "Products");
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var product = context.Products.Find(id);
+            if (product == null)
+            {
+                return RedirectToAction("Index", "Products");
+            }
+            //delete image
+            string imagePath = environment.WebRootPath + "/Images/" + product.ImageFileName;
+            System.IO.File.Delete(imagePath);
+            //delete product
+            context.Products.Remove(product);
+            context.SaveChanges(true);
+
             return RedirectToAction("Index", "Products");
         }
     }

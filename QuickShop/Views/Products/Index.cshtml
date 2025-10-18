@@ -50,7 +50,7 @@
 				<td>@item.CreatedAt.ToString("dd/MM/yyyy")</td>
 				<td style="white-space:nowrap">
 					<a asp-controller="Products" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
-					<a asp-controller="Products" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+					<a asp-controller="Products" asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Are You Sure?')" class="btn btn-sm btn-danger">Delete</a>
 				</td>
 			</tr>
 		}
