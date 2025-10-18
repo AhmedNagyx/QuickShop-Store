@@ -15,11 +15,16 @@ namespace QuickShop.Controllers
             this.context = context;
             this.environment = environment;
         }
-        public IActionResult Index(int pageIndex)
+        public IActionResult Index(int pageIndex, string? search)
         {
             IQueryable<Product> query = context.Products.OrderByDescending(x => x.Id);
+            //search
+            if (search != null)
+            {
+                query = query.Where(x => x.Name.Contains(search) || x.Brand.Contains(search) || x.Category.Contains(search));
+            }
             //pagination
-            if(pageIndex < 1)
+            if (pageIndex < 1)
             {
                 pageIndex = 1;
             }
@@ -30,6 +35,7 @@ namespace QuickShop.Controllers
 
             ViewData["PageIndex"] = pageIndex;
             ViewData["TotalPages"] = totalPages;
+            ViewData["Search"] = search ?? "";
             return View(products);
         }
         public IActionResult Create()

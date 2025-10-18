@@ -1,9 +1,9 @@
 ﻿@model List<Product>
 
 @{
-	ViewData["Title"] = "Product List";
 	int pageIndex = (int)ViewData["PageIndex"]!;
 	int totalPages = (int)ViewData["TotalPages"]!;
+	string search = (string)ViewData["Search"]!;
 }
 
 <h2 class="text-center mb-5"> List Of Products</h2>
@@ -13,7 +13,10 @@
 		<a asp-controller="Products" asp-action="Create" class="btn btn-primary">Add New Product</a>
 	</div>
 	<div class="col">
-
+		<form class="d-flex" role="search">
+			<input class="form-control me-2" type="search" name="search" value="@search" placeholder="Search" aria-label="Search" />
+			<button class="btn btn-outline-success" type="submit">Search</button>
+		</form>
 	</div>
 </div>
 
@@ -68,7 +71,7 @@
 			{
 				active = "active";
 			}
-			<li class="page-item @active "><a class="page-link" asp-route-pageIndex="@i" >@i</a></li>
+			<li class="page-item @active "><a class="page-link" asp-route-pageIndex="@i" asp-route-search="@search" >@i</a></li>
 		}
 	</ul>
 </nav>
