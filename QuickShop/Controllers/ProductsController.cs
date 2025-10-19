@@ -4,6 +4,7 @@ using QuickShop.Services;
 
 namespace QuickShop.Controllers
 {
+    [Route("/Admin/[controller]/{action=Index}/{id?}")]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext context;
