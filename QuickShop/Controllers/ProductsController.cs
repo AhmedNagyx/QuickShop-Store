@@ -22,11 +22,11 @@ namespace QuickShop.Controllers
             //search
             if (search != null)
             {
-                query = query.Where(x => x.Name.Contains(search) || x.Brand.Contains(search) || x.Category.Contains(search));
+                query = query.Where(x => x.Name.Contains(search) || x.Author.Contains(search) || x.Category.Contains(search));
             }
 
             //sort
-            string[] validColumns = {"Id", "Name", "Brand", "Category", "Price", "CreatedAt" };
+            string[] validColumns = {"Id", "Name", "Author", "Category", "Price", "CreatedAt" };
             string[] validOrderBy = { "desc", "asc" };
 
             if (!validColumns.Contains(column))
@@ -50,15 +50,15 @@ namespace QuickShop.Controllers
 
                 }
             }
-            else if (column == "Brand")
+            else if (column == "Author")
             {
                 if (orderBy == "asc")
                 {
-                    query = query.OrderBy(x => x.Brand);
+                    query = query.OrderBy(x => x.Author);
                 }
                 else
                 {
-                    query = query.OrderByDescending(x => x.Brand);
+                    query = query.OrderByDescending(x => x.Author);
                 }
             }
             else if (column == "Category")
@@ -158,7 +158,7 @@ namespace QuickShop.Controllers
                 Name = productDto.Name,
                 Price = productDto.Price,
                 Description = productDto.Description,
-                Brand = productDto.Brand,
+                Author = productDto.Author,
                 Category = productDto.Category,
                 ImageFileName = newFileName,
                 CreatedAt = DateTime.Now
@@ -181,7 +181,7 @@ namespace QuickShop.Controllers
             var productDto = new ProductDto
             {
                 Name = product.Name,
-                Brand = product.Brand,
+                Author = product.Author,
                 Category = product.Category,
                 Price = product.Price,
                 Description = product.Description
@@ -226,7 +226,7 @@ namespace QuickShop.Controllers
             product.Name = productDto.Name;
             product.Price = productDto.Price;
             product.Description = productDto.Description;
-            product.Brand = productDto.Brand;
+            product.Author = productDto.Author;
             product.Category = productDto.Category;
             product.ImageFileName = newFileName;
             context.SaveChanges();

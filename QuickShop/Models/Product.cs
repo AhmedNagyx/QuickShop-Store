@@ -12,7 +12,7 @@ namespace QuickShop.Models
         public decimal Price { get; set; }
         public string Description { get; set; } = "";
         [MaxLength(100)]
-        public string Brand { get; set; } = "";
+        public string Author { get; set; } = "";
         [MaxLength(100)]
         public string Category { get; set; } = "";
         [MaxLength(100)]
