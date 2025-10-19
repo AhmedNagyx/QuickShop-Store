@@ -15,7 +15,7 @@ namespace QuickShop.Controllers
             this.context = context;
             this.environment = environment;
         }
-        public IActionResult Index(int pageIndex, string? search)
+        public IActionResult Index(int pageIndex, string? search, string? column, string? orderBy)
         {
             IQueryable<Product> query = context.Products.OrderByDescending(x => x.Id);
             //search
@@ -23,8 +23,92 @@ namespace QuickShop.Controllers
             {
                 query = query.Where(x => x.Name.Contains(search) || x.Brand.Contains(search) || x.Category.Contains(search));
             }
-            //pagination
-            if (pageIndex < 1)
+
+            //sort
+            string[] validColumns = {"Id", "Name", "Brand", "Category", "Price", "CreatedAt" };
+            string[] validOrderBy = { "desc", "asc" };
+
+            if (!validColumns.Contains(column))
+            { 
+                column= "Id";
+            }
+            if (!validOrderBy.Contains(orderBy))
+            {
+                orderBy = "desc";
+            }
+
+            if (column == "Name")
+            {
+                if (orderBy == "asc")
+                {
+                    query = query.OrderBy(x => x.Name);
+                }
+                else
+                {
+                    query = query.OrderByDescending(x => x.Name);
+
+                }
+            }
+            else if (column == "Brand")
+            {
+                if (orderBy == "asc")
+                {
+                    query = query.OrderBy(x => x.Brand);
+                }
+                else
+                {
+                    query = query.OrderByDescending(x => x.Brand);
+                }
+            }
+            else if (column == "Category")
+            {
+                if (orderBy == "asc")
+                {
+                    query = query.OrderBy(x => x.Category);
+                }
+                else
+                {
+                    query = query.OrderByDescending(x => x.Category);
+                }
+            }
+            else if (column == "Price")
+            {
+                if (orderBy == "asc")
+                {
+                    query = query.OrderBy(x => x.Price);
+                }
+                else
+                {
+                    query = query.OrderByDescending(x => x.Price);
+                }
+            }
+            else if (column == "CreatedAt")
+            {
+                if (orderBy == "asc")
+                {
+                    query = query.OrderBy(x => x.CreatedAt);
+                }
+                else
+                {
+                    query = query.OrderByDescending(x => x.CreatedAt);
+                }
+            }
+            else
+            {
+                if (orderBy == "asc")
+                {
+                    query = query.OrderBy(x => x.Id);
+                }
+                else
+                {
+                    query = query.OrderByDescending(x => x.Id);
+                }
+            }
+
+
+
+                //pagination
+                if (pageIndex < 1)
             {
                 pageIndex = 1;
             }
@@ -36,6 +120,8 @@ namespace QuickShop.Controllers
             ViewData["PageIndex"] = pageIndex;
             ViewData["TotalPages"] = totalPages;
             ViewData["Search"] = search ?? "";
+            ViewData["Column"] = column;
+            ViewData["OrderBy"] = orderBy;
             return View(products);
         }
         public IActionResult Create()

@@ -1,9 +1,28 @@
-﻿@model List<Product>
+﻿@using Microsoft.AspNetCore.Html
+@model List<Product>
 
 @{
-	int pageIndex = (int)ViewData["PageIndex"]!;
-	int totalPages = (int)ViewData["TotalPages"]!;
-	string search = (string)ViewData["Search"]!;
+    int pageIndex = (int)ViewData["PageIndex"]!;
+    int totalPages = (int)ViewData["TotalPages"]!;
+    string search = (string)ViewData["Search"]!;
+    string column = (string)ViewData["Column"]!;
+    string orderBy = (string)ViewData["OrderBy"]!;
+
+    HtmlString getArrow(string tableColumn)
+    {
+		if (tableColumn != column)
+		{
+			return new HtmlString("");
+		}
+		if (orderBy == "desc")
+		{
+			return new HtmlString("<i class='bi bi-arrow-down'></i>");
+		}
+		else
+		{
+			return new HtmlString("<i class='bi bi-arrow-up'></i>");
+		}
+	}
 }
 
 <h2 class="text-center mb-5"> List Of Products</h2>
@@ -20,16 +39,33 @@
 	</div>
 </div>
 
+<script>
+	function sortTable(column){
+		let orderBy="desc"
+		let currentColumn = "@column"
+		let currentOrderBy = "@orderBy"
+		if(currentColumn === column){
+			if(currentOrderBy === "asc"){
+				orderBy="desc"
+			}
+			else{
+				orderBy="asc"
+			}
+		}
+		window.location.href = "?search=@(search)&column=" + column + "&orderby=" + orderBy
+	}
+</script>
+
 <table class="table">
 	<thead>
 		<tr>
-			<th>Id</th>
-			<th>Name</th>
-			<th>Brand</th>
-			<th>Category</th>
-			<th>Price</th>
+			<th style="cursor:pointer" onclick="sortTable('Id')">Id @getArrow(@"Id")</th>
+			<th style="cursor:pointer" onclick="sortTable('Name')">Name @getArrow(@"Name")</th>
+			<th style="cursor:pointer" onclick="sortTable('Brand')">Brand @getArrow(@"Brand")</th>
+			<th style="cursor:pointer" onclick="sortTable('Category')">Category @getArrow(@"Category")</th>
+			<th style="cursor:pointer" onclick="sortTable('Price')">Price @getArrow(@"Price")</th>
 			<th>Image</th>
-			<th>Created At</th>
+			<th style="cursor:pointer" onclick="sortTable('CreatedAt')">Created At @getArrow(@"CreatedAt")</th>
 			<th>Action</th>
 		</tr>
 	</thead>
@@ -71,7 +107,8 @@
 			{
 				active = "active";
 			}
-			<li class="page-item @active "><a class="page-link" asp-route-pageIndex="@i" asp-route-search="@search" >@i</a></li>
+			<li class="page-item @active "><a class="page-link" asp-route-pageIndex="@i" asp-route-search="@search" 
+			asp-route-column="@column" asp-route-orderBy="@orderBy" >@i</a></li>
 		}
 	</ul>
 </nav>
