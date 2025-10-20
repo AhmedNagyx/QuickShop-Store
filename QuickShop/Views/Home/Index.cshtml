@@ -1,19 +1,46 @@
-﻿@{
+﻿@model List<Product>
+@{
     ViewData["Title"] = "Home Page";
     ViewData["HomePage"] = true;
 }
 
-<div style="background-color: #557fb1">
+<div style="background-color: #b09459">
    <div class="container text-white py-5">
        <div class="row align-items-center">
            <div class="col-md-6">
-               <h1 class="mb-5 display-2"><strong>Welcome to QuickShop!</strong></h1>
-				<p>Your one-stop solution for all your electronic needs.
-                    Explore our wide range of products and enjoy a seamless shopping experience.</p>
+               <h1 class="mb-5 display-2"><strong>Welcome to BookSmith!</strong></h1>
+				<h5>Your one-stop solution for all your liteture needs.
+                    Explore our wide range of books and enjoy a seamless reading experience.</h5>
            </div>
             <div class="col-md-6 text-center">
-				<img src="~/Images/QuickShop.png" class="img-fluid" alt="QuickShop Logo" />
+                <img src="~/Images/BookSmith.png" class="img-fluid mx-auto d-block" style="max-width: 80%; height: auto;" alt="BookSmith Logo" />
             </div>
        </div>
    </div>
+</div>
+
+<div class="bg-light">
+    <div class="container py-4">
+        <h2 class="pb-4 text-center">Newest Books</h2>
+        <div class="row mb-5 g-3">
+            @foreach(var product in Model)
+            {
+                <div class="col-lg-3 col-md-6">
+                    <div class="rounded border shadow p-3 text-center h-100">
+                        <img src="~/Images/@product.ImageFileName" class="img-fluid" style="height: 200px; object-fit: contain"/>
+						<hr />
+                        <h5 class="py-2">@product.Name</h5>
+                        <p>Author: @product.Author<br />
+                           Category: @product.Category</p>
+						<h4 class="mb-3">@(product.Price)$</h4>
+						<a class="btn btn-primary btn-sm mb-2" href="#" role="button">Details</a>
+                        <button type="button" class="btn btn-warning btn-sm mb-2">Add to Cart
+                            <i class="bg bi-cart4"></i>
+                        </button>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </div>
