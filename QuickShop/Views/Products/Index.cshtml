@@ -2,14 +2,14 @@
 @model List<Product>
 
 @{
-    int pageIndex = (int)ViewData["PageIndex"]!;
-    int totalPages = (int)ViewData["TotalPages"]!;
-    string search = (string)ViewData["Search"]!;
-    string column = (string)ViewData["Column"]!;
-    string orderBy = (string)ViewData["OrderBy"]!;
+	int pageIndex = (int)ViewData["PageIndex"]!;
+	int totalPages = (int)ViewData["TotalPages"]!;
+	string search = (string)ViewData["Search"]!;
+	string column = (string)ViewData["Column"]!;
+	string orderBy = (string)ViewData["OrderBy"]!;
 
-    HtmlString getArrow(string tableColumn)
-    {
+	HtmlString getArrow(string tableColumn)
+	{
 		if (tableColumn != column)
 		{
 			return new HtmlString("");
@@ -30,37 +30,37 @@
 	<h2 class="text-center mb-5" style="color:#354f64"> List Of Books</h2>
 
 	<div class="row mb-5 ">
-	<div class="col">
+		<div class="col">
 			<a asp-controller="Products" asp-action="Create" class="btn" style="background-color:#354f64; color:white">Add New Book</a>
-	</div>
-	<div class="col">
-		<form class="d-flex" role="search">
+		</div>
+		<div class="col">
+			<form class="d-flex" role="search">
 				<input class="form-control me-2" type="search" name="search" value="@search" placeholder="Search" style="color:#354f64" aria-label="Search" />
 				<button class="btn " style="background-color:#354f64; color:white" type="submit">Search</button>
-		</form>
+			</form>
+		</div>
 	</div>
-</div>
 
-<script>
-	function sortTable(column){
+	<script>
+		function sortTable(column){
 		let orderBy="desc"
 		let currentColumn = "@column"
 		let currentOrderBy = "@orderBy"
 		if(currentColumn === column){
-			if(currentOrderBy === "asc"){
-				orderBy="desc"
-			}
-			else{
-				orderBy="asc"
-			}
+		if(currentOrderBy === "asc"){
+		orderBy="desc"
+		}
+		else{
+		orderBy="asc"
+		}
 		}
 		window.location.href = "?search=@(search)&column=" + column + "&orderby=" + orderBy
-	}
-</script>
+		}
+	</script>
 
-<table class="table">
-	<thead>
-		<tr>
+	<table class="table">
+		<thead>
+			<tr>
 				<th style="cursor:pointer; color:#354f64" onclick="sortTable('Id')">Id @getArrow(@"Id")</th>
 				<th style="cursor:pointer; color:#354f64" onclick="sortTable('Name')">Name @getArrow(@"Name")</th>
 				<th style="cursor:pointer; color:#354f64" onclick="sortTable('Author')">Author @getArrow(@"Author")</th>
@@ -69,47 +69,50 @@
 				<th style="color:#354f64">Image</th>
 				<th style="cursor:pointer; color:#354f64" onclick="sortTable('CreatedAt')">Created At @getArrow(@"CreatedAt")</th>
 				<th style="color:#354f64">Action</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
 					<td class="text-white">@item.Id</td>
 					<td class="text-white">@item.Name</td>
 					<td class="text-white">@item.Author</td>
 					<td class="text-white">@item.Category</td>
 					<td class="text-white">@(item.Price)$</td>
 					<td class="text-white">
-					@if (!string.IsNullOrEmpty(item.ImageFileName))
-					{
-						<img src="/Images/@item.ImageFileName" width="100"/>
-					}
-					else
-					{
-						<span>No Image</span>
-					}
+						@if (!string.IsNullOrEmpty(item.ImageFileName))
+						{
+							<img src="/Images/@item.ImageFileName" width="100"/>
+						}
+						else
+						{
+							<span>No Image</span>
+						}
 					</td>
 					<td class="text-white">@item.CreatedAt.ToString("dd/MM/yyyy")</td>
 					<td style="white-space:nowrap" class="text-white">
-					<a asp-controller="Products" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
-					<a asp-controller="Products" asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Are You Sure?')" class="btn btn-sm btn-danger">Delete</a>
+						<a asp-controller="Products" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+						<a asp-controller="Products" asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Are You Sure?')" class="btn btn-sm btn-danger">Delete</a>
 					</td>
-			</tr>
-		}
-	</tbody>
-</table>
+				</tr>
+			}
+		</tbody>
+	</table>
 
-<nav>
-	<ul class="pagination">
-		@for (int i = 1; i <= totalPages; i++)
-		{
-			string active = "";
+	<nav>
+		<ul class="pagination">
+			@for (int i = 1; i <= totalPages; i++)
+			{
+				string style = "";
+				string active = "";
 			if (i == pageIndex)
 			{
 				active = "active";
+					style = "background-color: #354f64";
+				
 			}
-			<li class="page-item @active "><a class="page-link" asp-route-pageIndex="@i" asp-route-search="@search" 
+			<li class="page-item @active "><a class="page-link" style="@style" asp-route-pageIndex="@i" asp-route-search="@search" 
 			asp-route-column="@column" asp-route-orderBy="@orderBy" >@i</a></li>
 		}
 	</ul>
