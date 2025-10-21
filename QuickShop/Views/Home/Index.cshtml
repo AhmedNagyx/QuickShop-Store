@@ -3,8 +3,10 @@
     ViewData["Title"] = "Home Page";
     ViewData["HomePage"] = true;
 }
+<body>
 
-<div style="background-color: #b09459">
+
+    <div style="background-color: #b09459">
    <div class="container text-white py-5">
        <div class="row align-items-center">
            <div class="col-md-6">
@@ -19,20 +21,20 @@
    </div>
 </div>
 
-<div class="bg-light">
+    <div style="background-color: #354f64">
     <div class="container py-4">
-        <h2 class="pb-4 text-center">Newest Books</h2>
+            <h2 class="pb-4 text-center" style="color:#b09459">Newest Books</h2>
         <div class="row mb-5 g-3">
             @foreach(var product in Model)
             {
                 <div class="col-lg-3 col-md-6">
                     <div class="rounded border shadow p-3 text-center h-100">
                         <img src="~/Images/@product.ImageFileName" class="img-fluid" style="height: 200px; object-fit: contain"/>
-						<hr />
-                        <h5 class="py-2">@product.Name</h5>
-                        <p>Author: @product.Author<br />
+						<hr style="color:white"/>
+                            <h5 class="py-2" style="color:#b09459">@product.Name</h5>
+                        <p class="text-white">Author: @product.Author<br />
                            Category: @product.Category</p>
-						<h4 class="mb-3">@(product.Price)$</h4>
+						<h4 class="mb-3 text-white">@(product.Price)$</h4>
 						<a class="btn btn-primary btn-sm mb-2" href="#" role="button">Details</a>
                         <button type="button" class="btn btn-warning btn-sm mb-2">Add to Cart
                             <i class="bg bi-cart4"></i>
@@ -44,3 +46,4 @@
         </div>
     </div>
 </div>
+</body>
