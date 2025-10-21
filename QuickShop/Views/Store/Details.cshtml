@@ -1,0 +1,26 @@
+﻿@model Product
+@{
+}
+<body style="background-color:#b09459">
+
+<div class="row mt-5">
+	<div class="col-md-4 text-center " >
+		<img src="/Images/@Model.ImageFileName" class="img-fluid mb-3" width="250" />
+	</div>
+	<div class="col-md-8">
+			<h2 class="mb-3 text-white fw-bold">@Model.Name</h2>
+			<hr style="color: white" />
+			<h5 class="mb-3 text-white fw-bold">Author:<span style="color:#354f64"> @Model.Author</span></h5>
+			<h5 class="mb-3 text-white fw-bold">Category: <span style="color:#354f64">@Model.Category</span></h5>
+			<h3 class="mb-3 text-white fw-bold">Price: <span style="color:#354f64">@(Model.Price)$</span></h3>
+			<hr style="color: white" />
+
+			<p class="mb-4 text-white fw-bold" style="white-space:pre-line">@Model.Description</p>
+		<button type="button" class="btn btn-warning btn-sm ">
+			Add to Cart
+			<i class="bg bi-cart4"></i>
+		</button>
+	</div>
+</div>
+
+</body>
