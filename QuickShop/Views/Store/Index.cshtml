@@ -2,12 +2,12 @@
 @{
 
 }
-<body style="background-color:#b09459">
-    <h2 class="pb-4 text-center" style="color:#354f64">Books</h2>
+
+    <h2 class="pb-4 text-center">Books</h2>
 
     <form class="row g-3 mb-3">
         <div class="col-lg-2 col-md-4">
-            <select style="background-color: #354f64; color:#f0e7c1" class="form-select" name="author"
+            <select class="form-select" name="author"
             asp-for="Author" onchange="this.form.submit()">
                 <option value="">All Authors</option>
                 <option value="Ahmed Nagy">Ahmed Nagy</option>
@@ -16,7 +16,7 @@
            </select>
         </div>
         <div class="col-lg-2 col-md-4">
-            <select style="background-color: #354f64; color:#f0e7c1" class="form-select" name="category"
+            <select class="form-select" name="category"
             asp-for="Category" onchange="this.form.submit()">
                 <option value="">All Categories</option>
                 <option value="Fiction">Fiction</option>
@@ -47,7 +47,7 @@
             </select>
         </div>
         <div class="col-lg-2 col-md-4">
-            <select style="background-color: #354f64; color:#f0e7c1" class="form-select" name="sort"
+            <select class="form-select" name="sort"
             asp-for="Sort" onchange="this.form.submit()">
                 <option value="newest">Sort By Newest</option>
                 <option value="oldest">Sort By Oldest</option>
@@ -57,18 +57,18 @@
         </div>
         <div class="col-lg-6 col-md-12 d-flex">
             <input class="form-control me-2" name="search" asp-for="Search" placeholder="Search By Book Name" />
-            <button class="btn" style="background-color:#354f64; color:#f0e7c1" type="submit">Search</button>
+            <button class="btn btn-outline-success" type="submit">Search</button>
         </div>
     </form>
 
-    <div class="row mb-5 g-3" style="background-color:#b09459 ;color:white">
+    <div class="row mb-5 g-3">
     @foreach (var product in ViewBag.Products)
     {
         <div class="col-lg-3 col-md-6">
             <div class="rounded border shadow p-3 text-center h-100">
                 <img src="~/Images/@product.ImageFileName" class="img-fluid" style="height: 200px; object-fit: contain" />
                 <hr />
-                    <h5 class="py-2" style="color:#354f64">@product.Name</h5>
+                    <h5 class="py-2">@product.Name</h5>
                 <p>
                     Author: @product.Author<br />
                     Category: @product.Category
@@ -90,20 +90,18 @@
     <ul class="pagination" >
         @for (int i = 1; i <= ViewBag.totalPages; i++)
         {
-            string style = "";
+           
             string active = "";
             if (i == ViewBag.pageIndex)
             {
                 active = "active";
-                style = "background-color: #354f64";
 
             }
             <li class="page-item @active ">
-                <a class="page-link" style="@style" asp-route-pageIndex="@i"
+                <a class="page-link" asp-route-pageIndex="@i"
                        asp-route-search="@Model.Search" asp-route-author="@Model.Author"
                        asp-route-category="@Model.Category" asp-route-sort="@Model.Sort">@i</a>
             </li>
         }
     </ul>
 </nav>
-</body>

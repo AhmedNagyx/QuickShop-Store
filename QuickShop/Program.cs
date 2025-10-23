@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using QuickShop.Models;
 using QuickShop.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
+    options =>
+    {
+        options.Password.RequiredLength = 6;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+
+    }).AddEntityFrameworkStores<ApplicationDbContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,5 +42,15 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+//create roles and admin user if not exists
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+    var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+
+
+    await DatabaseIntializer.SeedDataAsync(userManager, roleManager);
+}
 
 app.Run();

@@ -24,19 +24,19 @@
 		}
 	}
 }
-<body style="background-color:#b09459 ;color:#354f64">
+
 
 
 	<h2 class="text-center mb-5" style="color:#354f64"> List Of Books</h2>
 
 	<div class="row mb-5 ">
 		<div class="col">
-			<a asp-controller="Products" asp-action="Create" class="btn" style="background-color:#354f64; color:white">Add New Book</a>
+			<a asp-controller="Products" asp-action="Create" class="btn btn-success">Add New Book</a>
 		</div>
 		<div class="col">
 			<form class="d-flex" role="search">
-				<input class="form-control me-2" type="search" name="search" value="@search" placeholder="Search" style="color:#354f64" aria-label="Search" />
-				<button class="btn " style="background-color:#354f64; color:white" type="submit">Search</button>
+				<input class="form-control me-2" type="search" name="search" value="@search" placeholder="Search" aria-label="Search" />
+				<button class="btn btn-success" type="submit">Search</button>
 			</form>
 		</div>
 	</div>
@@ -61,26 +61,27 @@
 	<table class="table">
 		<thead>
 			<tr>
-				<th style="cursor:pointer; color:#354f64" onclick="sortTable('Id')">Id @getArrow(@"Id")</th>
-				<th style="cursor:pointer; color:#354f64" onclick="sortTable('Name')">Name @getArrow(@"Name")</th>
-				<th style="cursor:pointer; color:#354f64" onclick="sortTable('Author')">Author @getArrow(@"Author")</th>
-				<th style="cursor:pointer; color:#354f64" onclick="sortTable('Category')">Category @getArrow(@"Category")</th>
-				<th style="cursor:pointer; color:#354f64" onclick="sortTable('Price')">Price @getArrow(@"Price")</th>
-				<th style="color:#354f64">Image</th>
-				<th style="cursor:pointer; color:#354f64" onclick="sortTable('CreatedAt')">Created At @getArrow(@"CreatedAt")</th>
-				<th style="color:#354f64">Action</th>
+				<th style="cursor:pointer" onclick="sortTable('Id')">Id @getArrow(@"Id")</th>
+				<th style="cursor:pointer" onclick="sortTable('Name')">Name @getArrow(@"Name")</th>
+				<th style="cursor:pointer" onclick="sortTable('Author')">Author @getArrow(@"Author")</th>
+				<th style="cursor:pointer" onclick="sortTable('Category')">Category @getArrow(@"Category")</th>
+
+				<th style="cursor:pointer" onclick="sortTable('Price')">Price @getArrow(@"Price")</th>
+				<th>Image</th>
+				<th style="cursor:pointer" onclick="sortTable('CreatedAt')">Created At @getArrow(@"CreatedAt")</th>
+				<th>Action</th>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach (var item in Model)
 			{
 				<tr>
-					<td class="text-white">@item.Id</td>
-					<td class="text-white">@item.Name</td>
-					<td class="text-white">@item.Author</td>
-					<td class="text-white">@item.Category</td>
-					<td class="text-white">@(item.Price)$</td>
-					<td class="text-white">
+					<td>@item.Id</td>
+					<td>@item.Name</td>
+					<td>@item.Author</td>
+					<td>@item.Category</td>
+					<td>@(item.Price)$</td>
+					<td>
 						@if (!string.IsNullOrEmpty(item.ImageFileName))
 						{
 							<img src="/Images/@item.ImageFileName" width="100"/>
@@ -90,8 +91,8 @@
 							<span>No Image</span>
 						}
 					</td>
-					<td class="text-white">@item.CreatedAt.ToString("dd/MM/yyyy")</td>
-					<td style="white-space:nowrap" class="text-white">
+					<td>@item.CreatedAt.ToString("dd/MM/yyyy")</td>
+					<td style="white-space:nowrap">
 						<a asp-controller="Products" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
 						<a asp-controller="Products" asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Are You Sure?')" class="btn btn-sm btn-danger">Delete</a>
 					</td>
@@ -117,4 +118,3 @@
 		}
 		</ul>
 	</nav>
-</body>

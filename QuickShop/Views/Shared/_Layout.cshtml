@@ -13,7 +13,7 @@
 <body >
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow "
-             style="background-color: #354f64 ">
+            >
             <div class="container ">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="~/Images/BookSmith.png" width="60"/></a>
@@ -24,26 +24,35 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link " style="color: #f0e7c1" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " style="color: #f0e7c1" asp-area="" asp-controller="Store" asp-action="Index">Store</a>
+                            <a class="nav-link " asp-area="" asp-controller="Store" asp-action="Index">Store</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" style="color: #f0e7c1" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link"  asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" style="color: #f0e7c1; background-color: #354f64" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Admin
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-dark" style="background-color: #354f64">
-                                <li><a class="dropdown-item" style="color: #f0e7c1" asp-area="" asp-controller="Products" asp-action="Index">Books</a></li>
-                                <li><a class="dropdown-item" style="color: #f0e7c1" asp-area="" asp-controller="Home" asp-action="Index">Profile</a></li>
-                                <li><hr class="dropdown-divider" style="color: #f0e7c1"></li>
-                                <li><a class="dropdown-item" style="color: #f0e7c1" asp-area="" asp-controller="Home" asp-action="Index">Log Out</a></li>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index">Books</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Log Out</a></li>
                             </ul>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="btn btn-outline-success ms-1 me-2" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-success me-2" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
                         </li>
                     </ul>
                 </div>
@@ -63,7 +72,7 @@
     }
    
 
-    <footer class="border-top footer text-white" style="background-color:#b09459 ;color:#354f64">
+    <footer class="border-top footer">
         <div class="container">
             <img src="~/Images/BookSmith.png" width="50" />  &copy; 2025 - BookSmith - Ahmed Nagy
             <!-- <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> -->
