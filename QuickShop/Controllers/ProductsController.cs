@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuickShop.Models;
 using QuickShop.Services;
 
 namespace QuickShop.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("/Admin/[controller]/{action=Index}/{id?}")]
     public class ProductsController : Controller
     {
