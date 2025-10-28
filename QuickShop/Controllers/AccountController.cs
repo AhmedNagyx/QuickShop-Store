@@ -138,7 +138,7 @@ namespace QuickShop.Controllers
                 ViewBag.ErrorMessage = "Unable to update profile: " + result.Errors.First().Description;
             }
             return View(profileDto);
-        }
+        } 
         public IActionResult AccessDenied()
         {
             return RedirectToAction("Index","Home");
