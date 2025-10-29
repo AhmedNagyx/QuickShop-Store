@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using QuickShop.Models;
 using QuickShop.Services;
+using sib_api_v3_sdk.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
         options.Password.RequireUppercase = false;
         options.Password.RequireLowercase = false;
 
-    }).AddEntityFrameworkStores<ApplicationDbContext>();
+    }).AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+Configuration.Default.ApiKey.Add("api-key", builder.Configuration["BrevoSettings:ApiKey"]);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

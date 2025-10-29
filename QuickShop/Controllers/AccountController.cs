@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuickShop.Models;
+using QuickShop.Services;
+using System.ComponentModel.DataAnnotations;
 
 namespace QuickShop.Controllers
 {
@@ -9,12 +11,14 @@ namespace QuickShop.Controllers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly IConfiguration configuration;
 
         public AccountController(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager, IConfiguration configuration)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.configuration = configuration;
         }
         public IActionResult Register()
         {
@@ -138,10 +142,139 @@ namespace QuickShop.Controllers
                 ViewBag.ErrorMessage = "Unable to update profile: " + result.Errors.First().Description;
             }
             return View(profileDto);
-        } 
+        }
+
+        [Authorize]
+        public IActionResult Password()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Password(PasswordDto passwordDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ErrorMessage = "Invalid input";
+                return View(passwordDto);
+            }
+
+            var appUser = await userManager.GetUserAsync(User);
+            if (appUser == null)
+            {
+                return RedirectToAction("Index","Home");
+            }
+
+            var resut = await userManager.ChangePasswordAsync(appUser, passwordDto.CurrentPassword, passwordDto.NewPassword);
+            if (resut.Succeeded)
+            {
+                ViewBag.SuccessMessage = "Password changed successfully";
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Error changing password: " + resut.Errors.First().Description;
+            }
+            return View();
+        }
         public IActionResult AccessDenied()
         {
             return RedirectToAction("Index","Home");
+        }
+
+        public IActionResult ForgotPassword()
+        {
+            if(signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword([Required,EmailAddress]string email)
+        {
+            if (signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.Email = email;
+            if(!ModelState.IsValid)
+            {
+                ViewBag.EmailError = ModelState["email"]?.Errors.First().ErrorMessage ?? "Invalid Email";
+                return View();
+            }
+
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                ViewBag.EmailError = "No user associated with this email";
+                return View();
+            }
+            else
+            {
+                var token = await userManager.GeneratePasswordResetTokenAsync(user);
+                string restLink = Url.ActionLink("ResetPassword", "Account" , new { token }) ?? "Url Error";
+
+                //send url by email
+                string senderName = configuration["BrevoSettings:SenderName"] ?? "BookSmith";
+                string senderEmail = configuration["BrevoSettings:SenderEmail"] ?? "Admin@BookSmith.com";
+                string userName = user.FirstName + "" + user.LastName;
+                string subject = "Password Reset Request" ?? "";
+                string textContent = $"Hello {user.FirstName},\n\n" +
+                    $"We received a request to reset your password. Please click the link below to reset your password:\n\n" +
+                    $"{restLink}\n\n" +
+                    $"If you did not request a password reset, please ignore this email.\n\n" +
+                    $"Best regardss,\n" +
+                    $"BookSmith Team";
+                EmailSender.SendEmail(senderName, senderEmail, userName, email, textContent, subject);
+            }
+
+            ViewBag.SuccessMessage = "A password reset link has been sent.";
+            return View();
+        }
+
+        public IActionResult ResetPassword(string token)
+        {
+            if (signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(string token, ResetPasswordDto resetPasswordDto)
+        {
+            if (signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(resetPasswordDto);
+            }
+
+            var user = await userManager.FindByEmailAsync(resetPasswordDto.Email);
+            if(user == null) {
+                ViewBag.ErrorMessage = "No user associated with this email";
+                return View(resetPasswordDto);
+            }
+
+            var result = await userManager.ResetPasswordAsync(user, token, resetPasswordDto.Password);
+            if (result.Succeeded)
+            {
+                ViewBag.SuccessMessage = "Password has been reset successfully.";
+                return View();
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Error resetting password: " + result.Errors.First().Description;
+            }
+            return View(resetPasswordDto);
         }
     }
 }
