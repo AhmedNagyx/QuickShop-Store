@@ -27,7 +27,7 @@
 
 
 
-	<h2 class="text-center mb-5"> List Of Books</h2>
+<h2 class="text-center mb-5"> List Of Books</h2>
 
 	<div class="row mb-5 ">
 		<div class="col">
@@ -105,15 +105,15 @@
 		<ul class="pagination">
 			@for (int i = 1; i <= totalPages; i++)
 			{
-				string style = "";
+				
 				string active = "";
 			if (i == pageIndex)
 			{
 				active = "active";
-					style = "background-color: #354f64";
+					
 				
 			}
-			<li class="page-item @active "><a class="page-link" style="@style" asp-route-pageIndex="@i" asp-route-search="@search" 
+			<li class="page-item @active "><a class="page-link" asp-route-pageIndex="@i" asp-route-search="@search" 
 			asp-route-column="@column" asp-route-orderBy="@orderBy" >@i</a></li>
 		}
 		</ul>

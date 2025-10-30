@@ -1,0 +1,66 @@
+﻿@model List<ApplicationUser>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@{
+}
+
+<h2 class="text-center mb-5"> List Of Users</h2>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Phone Number</th>
+			<th>Role</th>
+			<th>Created At</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		@foreach(var user in Model)
+		{
+			<tr>
+				<td>@(user.FirstName +" "+ user.LastName)</td>
+				<td>@user.Email</td>
+				<td>@user.PhoneNumber</td>
+				<td>@{
+						var roles = await UserManager.GetRolesAsync(user);
+						var roleString = string.Join(", ", roles);
+
+						string color = "";
+						if (roles.Contains("Admin")) color = "bg-warning text-dark";
+						else if (roles.Contains("Client")) color = "bg-success";
+
+						<span class="badge @color">@roleString</span>
+					}
+				</td>
+				<td>@user.CreatedAt.ToString("yyyy-MM-dd")</td>
+				<td>
+					<a asp-controller="Users" asp-action="Details" asp-route-id="@user.Id" class="btn btn-primary">Details</a>
+				</td>
+			</tr>
+
+		}
+	</tbody>
+</table>
+
+<nav>
+	<ul class="pagination">
+		@for (int i = 1; i <= ViewBag.totalPages; i++)
+		{
+
+			string active = "";
+			if (i == ViewBag.pageIndex)
+			{
+				active = "active";
+
+
+			}
+			<li class="page-item @active ">
+				<a class="page-link" asp-route-pageIndex="@i">@i</a>
+			</li>
+		}
+	</ul>
+</nav>
