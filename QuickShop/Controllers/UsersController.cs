@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using QuickShop.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -49,7 +50,83 @@ namespace QuickShop.Controllers
                 return RedirectToAction("Index", "Users");
             }
             ViewBag.Roles = await userManager.GetRolesAsync(user);
+
+            // Get all roles
+            var allRoles = roleManager.Roles.ToList();
+            var items = new List<SelectListItem>();
+            foreach (var role in allRoles) {
+                items.Add(new SelectListItem { 
+                    Text = role.Name,
+                    Value = role.Name,
+                    Selected = await userManager.IsInRoleAsync(user, role.Name!)
+                });
+            }
+            ViewBag.SelectItems = items;
             return View(user);
+        }
+
+        public async Task<IActionResult> EditRole(string? id, string? newRole)
+        {
+            if(id==null|| newRole == null)
+            {
+                return RedirectToAction("Index", "Users");
+            }
+
+            var roleExists = await roleManager.RoleExistsAsync(newRole);
+            var user = await userManager.FindByIdAsync(id);
+
+            if (user == null || !roleExists)
+            {
+                return RedirectToAction("Index", "Users");
+            }
+
+            var currentUser = await userManager.GetUserAsync(User);
+            if (currentUser!.Id == user.Id)
+            {
+                TempData["ErrorMessage"] = "You can not update your own role";
+                return RedirectToAction("Details", "Users", new { id });
+            }
+            //update user role
+            var userRoles = await userManager.GetRolesAsync(user);
+            await userManager.RemoveFromRolesAsync(user, userRoles);
+            await userManager.AddToRoleAsync(user, newRole);
+            TempData["SuccessMessage"] = "Role updated successfuly";
+
+            return RedirectToAction("Details", "Users", new { id });
+
+        }
+
+        public async Task<IActionResult> DeleteAccount(string? id)
+        {
+            if(id == null)
+            {
+                return RedirectToAction("Index", "Users");
+            }
+            var appUser = await userManager.FindByIdAsync(id);
+            if (appUser == null)
+            {
+                return RedirectToAction("Index", "Users");
+            }
+            var currentUser = await userManager.GetUserAsync(User);
+            if(currentUser!.Id == appUser.Id)
+            {
+                TempData["ErrorMessage"] = "You can not delete your own account";
+                return RedirectToAction("Details", "Users", new { id });
+            }
+
+            var result = await userManager.DeleteAsync(appUser);
+            if (result.Succeeded)
+            {
+                TempData["SuccessMessage"] = "Account deleted successfuly";
+                return RedirectToAction("Index", "Users");
+
+            }
+           
+            
+            TempData["ErrorMessage"] = "Error occured while deleting account";
+            
+            return RedirectToAction("Details", "Users", new { id });
+
         }
     }
 }
