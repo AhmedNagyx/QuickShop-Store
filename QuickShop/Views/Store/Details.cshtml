@@ -10,13 +10,13 @@
 	<div class="col-md-8">
 			<h2 class="mb-3">@Model.Name</h2>
 			<hr />
-			<h5 class="mb-3">Author: @Model.Author</span></h5>
-			<h5 class="mb-3">Category: @Model.Category</span></h5>
-			<h3 class="mb-3">Price: @(Model.Price)$</span></h3>
+			<h5 class="mb-3">Author: @Model.Author</h5>
+			<h5 class="mb-3">Category: @Model.Category</h5>
+			<h3 class="mb-3">Price: @(Model.Price)$</h3>
 			<hr/>
 
 			<p class="mb-4" style="white-space:pre-line">@Model.Description</p>
-		<button type="button" class="btn btn-warning btn-sm ">
+		<button type="button" class="btn btn-warning btn-sm" onclick="addToCart(this,@Model.Id)">
 			Add to Cart
 			<i class="bg bi-cart4"></i>
 		</button>
