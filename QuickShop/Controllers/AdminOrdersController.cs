@@ -19,9 +19,9 @@ namespace QuickShop.Controllers
         public IActionResult Index(int pageIndex)
         {
             IQueryable<Order> query = context.Orders.Include(o => o.Client).Include(o => o.OrderItems).OrderByDescending(o => o.Id);
-            
 
-            if(pageIndex <= 0)
+
+            if (pageIndex <= 0)
             {
                 pageIndex = 1;
             }
@@ -48,8 +48,27 @@ namespace QuickShop.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.NumberOfOrders = context.Orders.Where(o=>o.ClientId == order.ClientId).Count();
+            ViewBag.NumberOfOrders = context.Orders.Where(o => o.ClientId == order.ClientId).Count();
             return View(order);
+        }
+
+        public IActionResult Edit(int id, string? paymentStatus, string? orderStatus)
+        {
+            var order = context.Orders.FirstOrDefault(o => o.Id == id);
+            if (order == null)
+            {
+                return RedirectToAction("Index");
+            }
+            if (!string.IsNullOrEmpty(paymentStatus))
+            {
+                order.PaymentStatus = paymentStatus;
+            }
+            if (!string.IsNullOrEmpty(orderStatus))
+            {
+                order.OrderStatus = orderStatus;
+            }
+            context.SaveChanges();
+            return RedirectToAction("Details", new { id });
         }
     }
 }
