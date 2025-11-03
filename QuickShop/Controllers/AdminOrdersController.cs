@@ -35,5 +35,21 @@ namespace QuickShop.Controllers
             ViewBag.TotalPages = totalPages;
             return View();
         }
+
+        public IActionResult Details(int id)
+        {
+            var order = context.Orders.Include(o => o.Client)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .FirstOrDefault(o => o.Id == id);
+
+            if (order == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.NumberOfOrders = context.Orders.Where(o=>o.ClientId == order.ClientId).Count();
+            return View(order);
+        }
     }
 }

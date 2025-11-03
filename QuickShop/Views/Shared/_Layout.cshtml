@@ -128,17 +128,7 @@
                         </li>
                     </ul>
 
-                    <ul class="navbar-nav me-2">
-                        <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Cart" asp-action="Index">
-                                <i class="bi bi-cart4 text-danger h3"></i>
-                                <span id="CartSize" class="badge bg-danger" style="vertical-align:top">
-									@QuickShop.Services.CartHelper.GetCartSize(Context.Request, Context.Response)
-
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
+                   
 
 					@using Microsoft.AspNetCore.Identity
 					@inject SignInManager<ApplicationUser> SignInManager
@@ -146,6 +136,17 @@
 
                     @if (SignInManager.IsSignedIn(User))
                     {
+                        <ul class="navbar-nav me-2">
+                            <li class="nav-item">
+                                <a class="nav-link " asp-area="" asp-controller="Cart" asp-action="Index">
+                                    <i class="bi bi-cart4 text-danger h3"></i>
+                                    <span id="CartSize" class="badge bg-danger" style="vertical-align:top">
+                                        @QuickShop.Services.CartHelper.GetCartSize(Context.Request, Context.Response)
+
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
 						var appUser = await UserManager.GetUserAsync(User);
                         if (User.IsInRole("Admin"))
                         {
