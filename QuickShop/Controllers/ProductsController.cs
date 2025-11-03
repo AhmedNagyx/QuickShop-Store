@@ -110,8 +110,8 @@ namespace QuickShop.Controllers
 
 
 
-                //pagination
-                if (pageIndex < 1)
+            //pagination
+            if (pageIndex < 1)
             {
                 pageIndex = 1;
             }
