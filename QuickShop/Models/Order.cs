@@ -7,7 +7,7 @@ namespace QuickShop.Models
         public int Id { get; set; }
 
         //foreign key
-        public int ClientId { get; set; }
+        public string? ClientId { get; set; }
         public ApplicationUser Client { get; set; } = null!;
 
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();

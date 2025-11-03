@@ -57,5 +57,77 @@ namespace QuickShop.Controllers
 
             return RedirectToAction("Confirm");
         }
+
+        public IActionResult Confirm()
+        {
+            List<OrderItem> cartItems = CartHelper.GetCartItems(Request, Response, context);
+            decimal total = CartHelper.GetSubTotal(cartItems) + shippingFee;
+            int CartSize = 0;
+            foreach (var item in cartItems)
+            {
+                CartSize += item.Quantity;
+            }
+
+            string deliveryAddress = TempData["DeliverryAddress"] as string ?? "";
+            string paymentMethod = TempData["PaymentMethod"] as string ?? "";
+            TempData.Keep();
+
+            if(CartSize==0 || deliveryAddress.Length == 0 || paymentMethod.Length == 0)
+            {
+                return RedirectToAction("Index","Home");
+            }
+
+            ViewBag.DeliveryAddress = deliveryAddress;
+            ViewBag.PaymentMethod = paymentMethod;
+            ViewBag.Total = total;
+            ViewBag.CartSize = CartSize;
+
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ConfirmAsync(int anything)
+        {
+            List<OrderItem> cartItems = CartHelper.GetCartItems(Request, Response, context);
+            string deliveryAddress = TempData["DeliverryAddress"] as string ?? "";
+            string paymentMethod = TempData["PaymentMethod"] as string ?? "";
+            TempData.Keep();
+            if (cartItems.Count == 0 || deliveryAddress.Length == 0 || paymentMethod.Length == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var appUser = await userManager.GetUserAsync(User);
+            if(appUser == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            //save order
+            var order = new Order
+            {
+                ClientId = appUser.Id,
+                OrderItems = cartItems,
+                ShippingFee = shippingFee,
+                DeliveryAddress = deliveryAddress,
+                PaymentMethod = paymentMethod,
+                PaymentStatus = "Pending",
+                PaymentDetails = "",
+                OrderStatus = "Created",
+                CreatedAt = DateTime.UtcNow
+
+            };
+            context.Orders.Add(order);
+            context.SaveChanges();
+
+            //delete cookie
+            Response.Cookies.Delete("ShoopingCartCookie");
+
+            ViewBag.SuccessMessage = "Order created successfully";
+
+
+            return View();
+        }
     }
 }

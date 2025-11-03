@@ -1,0 +1,46 @@
+﻿
+@{
+}
+
+<div class="mx-auto rounded border p-4" style="width: 500px">
+	<h2 class="text-center mb-3">Order Details</h2>
+	<hr />
+
+	@if (ViewBag.SuccessMessage != null)
+	{
+		<div class="alert alert-success">
+			@ViewBag.SuccessMessage
+		</div>
+		<a class="btn btn-outline-primary" asp-controller="ClientOrders" asp-action="Index">Back</a>
+	}
+	else{
+		<div class="row mb-3">
+			<div class="col-5">Delivery Address</div>
+			<div class="col-7">@ViewBag.DeliveryAddress</div>
+		</div>
+		<div class="row mb-3">
+			<div class="col-5">Payment Method</div>
+			<div class="col-7">@ViewBag.PaymentMethod</div>
+		</div>
+		<div class="row mb-3">
+			<div class="col-5">Total Account</div>
+			<div class="col-7">@(ViewBag.Total)$</div>
+		</div>
+		<div class="row mb-3">
+			<div class="col-5">Quantity</div>
+			<div class="col-7">@(ViewBag.CartSize)</div>
+		</div>
+
+		<form method="post">
+			<div class="row">
+				<div class="col-sm-6 d-grid">
+					<button type="submit" class="btn btn-primary">Confirm Order</button>
+				</div>
+				<div class="col-sm-6 d-grid">
+					<a asp-controller="Cart" asp-action="Index" class="btn btn-outline-secondary">Back to Cart</a>
+				</div>
+			</div>
+		</form>
+	}
+	
+</div>
